@@ -19,7 +19,6 @@ current_data = []
 i = test.ix[0]
 market_name=i.市场名称映射值
 goods_name=i.农产品名称映射值
-set=train.ix[train.市场名称映射值 == market_name ]
-sset=set.ix[train.农产品名称映射值 == goods_name]
-print(sset)
+set=train.ix[(train.市场名称映射值 == market_name) & (train.农产品名称映射值 == goods_name)]
+print(set.shape)
 # for i in train[:]:
