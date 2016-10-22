@@ -5,8 +5,6 @@ import time
 import pandas as pd
 from scipy import  stats
 import matplotlib.pyplot as plt
-import statsmodels.api as sm
-from statsmodels.graphics.api import qqplot
 from sklearn import linear_model
 from sklearn import ensemble
 from sklearn import svm
@@ -44,21 +42,25 @@ for j in range(0,32476):
  pass
  if set.shape[0]==0:
   continue
- kk = np.ndarray((set.shape[0], 1))
+ kk = np.ndarray((set.shape[0], 2))
  jj = 0
  for ii in set.数据发布时间.as_matrix():
-   kk[jj, 0] = (datetime.datetime.strptime(ii, "%Y-%m-%d") - datetime.datetime(2006, 1, 1)).days
+   kk[jj, 0] = (datetime.datetime.strptime(ii, "%Y-%m-%d") - datetime.datetime(2006, 1, 1)).days % 365
+   kk[jj,1]= (datetime.datetime.strptime(ii, "%Y-%m-%d") - datetime.datetime(2006, 1, 1)).days // 365
    jj = jj + 1
  #model = linear_model.LinearRegression()
  if j !=0 and market_name == test.ix[j-1].市场名称映射值 and goods_name == test.ix[j-1].农产品名称映射值 :
      pass
  else:
-     #model = linear_model.ElasticNet()
-     #model.fit(kk, set.平均交易价格.as_matrix())
-     params = {'n_estimators': 50, 'max_depth': 4, 'min_samples_split': 2,'learning_rate': 0.01, 'loss': 'ls'}
-     model=ensemble.GradientBoostingRegressor(**params)
+     model = ensemble.AdaBoostRegressor()
      model.fit(kk, set.平均交易价格.as_matrix())
- test.loc[j,'单位']=model.predict((datetime.datetime.strptime(test.ix[1].数据发布时间, "%Y-%m-%d") - datetime.datetime(2006, 1, 1)).days )
+     params = {'n_estimators': 50, 'max_depth': 4, 'min_samples_split': 2,'learning_rate': 0.01, 'loss': 'ls'}
+     #model=linear_model.LassoLarsCV()
+     #model.fit(kk, set.平均交易价格.as_matrix())
+ pre= np.ndarray((1, 2))
+ pre[0,0]=(datetime.datetime.strptime(test.ix[1].数据发布时间, "%Y-%m-%d") - datetime.datetime(2006, 1, 1)).days % 365
+ pre[0,1]=(datetime.datetime.strptime(test.ix[1].数据发布时间, "%Y-%m-%d") - datetime.datetime(2006, 1, 1)).days // 365
+ test.loc[j,'单位']=model.predict(pre )
  print(test.loc[j,'单位'])
  print(j)
 print(k)
