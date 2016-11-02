@@ -80,7 +80,7 @@ for j in range(ra,rl):
  #print(set)
  #print(pre[0,0])
  #print(pre[0,1])
- dd=model.predict(pre)*0.9+fix*0.1
+ dd=model.predict(pre)
  test.loc[j,'单位']=dd[0]
  #round(dd[0],2)
  print(test.loc[j,'单位'])
