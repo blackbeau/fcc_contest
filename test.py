@@ -1,4 +1,5 @@
 import os
+import xgboost as xgb
 import numpy as np
 import csv
 import time
@@ -9,6 +10,7 @@ from sklearn import linear_model
 from sklearn import ensemble
 from sklearn import svm
 import datetime
+import caffe
 map={0:0,1:1,2:1.95,3:2.90,4:3.85,5:4.80,6:5.75,7:6.70,8:7.}
 train = pd.read_csv("learngood/farming.csv", dtype={'平均交易价格': pd.np.float64})
 test = pd.read_csv("learngood/product_market.csv")
@@ -60,9 +62,9 @@ for j in range(ra,rl):
  if j !=ra and market_name == test.ix[j-1].市场名称映射值 and goods_name == test.ix[j-1].农产品名称映射值 :
      pass
  else:
-     model = ensemble.GradientBoostingRegressor(loss='ls', learning_rate=0.01, n_estimators=1000, subsample=1.0, criterion='friedman_mse', min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=7, min_impurity_split=1e-07, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort='auto')
-     model.fit(kk, set.平均交易价格.as_matrix())
-     model2=linear_model.Lasso()
+     #model = ensemble.GradientBoostingRegressor(loss='ls', learning_rate=0.01, n_estimators=1000, subsample=1.0, criterion='friedman_mse', min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=7, min_impurity_split=1e-07, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort='auto')
+     #model.fit(kk, set.平均交易价格.as_matrix())
+     model2=xgb.XGBRegressor()
      model2.fit(kk, set.平均交易价格.as_matrix())
      #params = {'n_estimators': 50, 'max_depth': 4, 'min_samples_split': 2,'learning_rate': 0.01, 'loss': 'ls'}
      #model=linear_model.LassoLarsCV()
@@ -78,13 +80,13 @@ for j in range(ra,rl):
  #print(set)
  #print(pre[0,0])
  #print(pre[0,1])
- dd=model.predict(pre)
- test.loc[j,'单位']=dd[0]*0.7+fix*0.2
+ dd=model2.predict(pre)
+ test.loc[j,'单位']=dd[0]
  #round(dd[0],2)
  print(test.loc[j,'单位'])
  print(j)
 print(k)
-test.to_csv("answersvr.csv", header=False ,index = False)
+test.to_csv("answer.csv", header=False ,index = False)
 """dta=pd.Series(set.平均交易价格.as_matrix())
 dta.index=pd.Index(set.数据发布时间.as_matrix())
 print(dta)"""
