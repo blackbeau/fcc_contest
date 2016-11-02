@@ -62,10 +62,10 @@ for j in range(ra,rl):
  if j !=ra and market_name == test.ix[j-1].市场名称映射值 and goods_name == test.ix[j-1].农产品名称映射值 :
      pass
  else:
-     #model = ensemble.GradientBoostingRegressor(loss='ls', learning_rate=0.01, n_estimators=1000, subsample=1.0, criterion='friedman_mse', min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=7, min_impurity_split=1e-07, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort='auto')
-     #model.fit(kk, set.平均交易价格.as_matrix())
-     model2=xgb.XGBRegressor()
-     model2.fit(kk, set.平均交易价格.as_matrix())
+     model = ensemble.GradientBoostingRegressor(loss='ls', learning_rate=0.01, n_estimators=1000, subsample=1.0, criterion='friedman_mse', min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=7, min_impurity_split=1e-07, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort='auto')
+     model.fit(kk, set.平均交易价格.as_matrix())
+     #model2=xgb.XGBRegressor()
+     #model2.fit(kk, set.平均交易价格.as_matrix())
      #params = {'n_estimators': 50, 'max_depth': 4, 'min_samples_split': 2,'learning_rate': 0.01, 'loss': 'ls'}
      #model=linear_model.LassoLarsCV()
      #model.fit(kk, set.平均交易价格.as_matrix())
@@ -80,7 +80,7 @@ for j in range(ra,rl):
  #print(set)
  #print(pre[0,0])
  #print(pre[0,1])
- dd=model2.predict(pre)
+ dd=model.predict(pre)*0.9+fix*0.1
  test.loc[j,'单位']=dd[0]
  #round(dd[0],2)
  print(test.loc[j,'单位'])
